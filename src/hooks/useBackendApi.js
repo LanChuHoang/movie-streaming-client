@@ -1,7 +1,7 @@
 import { useEffect } from "react";
+import backendApi from "../api/backendApi/backendApi";
 import useAuth from "./useAuth";
 import useRefreshToken from "./useRefreshToken";
-import backendApi from "../api/backendApi/backendApi";
 
 const useBackendApi = () => {
   const { auth } = useAuth();

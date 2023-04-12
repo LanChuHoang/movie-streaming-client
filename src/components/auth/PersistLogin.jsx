@@ -1,7 +1,7 @@
+import { useEffect, useRef, useState } from "react";
+import { Outlet } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import useRefreshToken from "../../hooks/useRefreshToken";
-import { Outlet } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
 
 const PersistLogin = () => {
   const isFirstTime = useRef(true);

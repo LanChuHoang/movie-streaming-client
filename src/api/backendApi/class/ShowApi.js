@@ -1,8 +1,8 @@
 import MediaApi from "./MediaApi";
 
 const endpoint = {
-  base: "/show",
-  search: "/show/search",
+  base: "/shows",
+  search: "/shows/search",
 };
 
 class ShowApi extends MediaApi {
@@ -39,8 +39,10 @@ class ShowApi extends MediaApi {
     return { ...detail, seasons };
   };
 
-  getSeasons = (id) => {
-    return this.client.get(`${this.endpoint.base}/${id}/seasons`);
+  getSeasons = async (id) => {
+    const res = await this.client.get(`${this.endpoint.base}/${id}/seasons`);
+    console.log("get seasons api", res);
+    return res;
   };
 
   getVideoUrl = async (showId, seasonNumber, episodeNumber) => {

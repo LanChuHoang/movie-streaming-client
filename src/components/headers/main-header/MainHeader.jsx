@@ -1,17 +1,16 @@
-import { useRef, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import useAuth from "../../../hooks/useAuth";
-import "./MainHeader.scss";
-import logo from "../../../assets/tmovie.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCaretDown,
   faArrowRightFromBracket,
+  faCaretDown,
   faScrewdriverWrench,
 } from "@fortawesome/free-solid-svg-icons";
-import useLogout from "../../../hooks/useLogout";
-import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import logo from "../../../assets/tmovie.png";
+import useAuth from "../../../hooks/useAuth";
 import useBackendApi from "../../../hooks/useBackendApi";
+import useLogout from "../../../hooks/useLogout";
+import "./MainHeader.scss";
 
 const headerNav = [
   {

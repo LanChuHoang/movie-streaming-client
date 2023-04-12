@@ -34,9 +34,9 @@ class MovieApi extends MediaApi {
 }
 
 const endpoint = {
-  base: "/movie",
-  search: "/movie/search",
-  random: "/movie/random",
+  base: "/movies",
+  search: "/movies/search",
+  random: "/movies/random",
 };
 
 export default MovieApi;

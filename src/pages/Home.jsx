@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
+import MediaApi from "../api/backendApi/class/MediaApi";
 import { OutlineButton } from "../components/button/Button";
 import HeroSlide from "../components/hero-slide/HeroSlide";
 import MovieList from "../components/movie-list/MovieList";
-import MediaApi from "../api/backendApi/class/MediaApi";
 
 const Home = () => {
   return (

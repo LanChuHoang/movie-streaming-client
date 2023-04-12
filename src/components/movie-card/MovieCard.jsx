@@ -1,7 +1,7 @@
-import "./movie-card.scss";
 import { Link } from "react-router-dom";
 import PlayButton from "../buttons/play-button/PlayButton";
 import Overlay from "../overlay/Overlay";
+import "./movie-card.scss";
 
 const MovieCard = ({ item, itemType }) => {
   return (

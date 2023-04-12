@@ -1,13 +1,13 @@
+import { FormControl, MenuItem, Select } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Mousewheel, Navigation } from "swiper";
 import { SwiperSlide } from "swiper/react";
-import { Navigation, Mousewheel } from "swiper";
-import SeasonCell from "./season-cell/SeasonCell";
 import "swiper/swiper-bundle.css";
-import "./SeasonList.scss";
 import { episodeReleased } from "../../api/tmdb/tmdbApi.helper";
 import LazySwiper from "../lazy-swiper/LazySwiper";
-import { FormControl, MenuItem, Select } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import "./SeasonList.scss";
+import SeasonCell from "./season-cell/SeasonCell";
 
 const SeasonList = ({ seasons = [], showId }) => {
   const [selectedIndex, setSelectedIndex] = useState(endIndex(seasons));

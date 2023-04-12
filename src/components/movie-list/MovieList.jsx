@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import "./movie-list.scss";
+import { useEffect, useState } from "react";
 import { SwiperSlide } from "swiper/react";
-import useBackendApi from "../../hooks/useBackendApi";
-import MovieCard from "../movie-card/MovieCard";
 import MediaApi from "../../api/backendApi/class/MediaApi";
+import useBackendApi from "../../hooks/useBackendApi";
 import LazySwiper from "../lazy-swiper/LazySwiper";
+import MovieCard from "../movie-card/MovieCard";
+import "./movie-list.scss";
 
 const MovieList = ({ id, itemType, listType }) => {
   const [items, setItems] = useState([]);

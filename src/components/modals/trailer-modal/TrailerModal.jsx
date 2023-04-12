@@ -1,5 +1,5 @@
+import { Fade, Modal } from "@mui/material";
 import "./trailerModal.scss";
-import { Modal, Fade } from "@mui/material";
 
 const TrailerModal = ({ open, onClose, srcUrl }) => {
   return (

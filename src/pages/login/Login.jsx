@@ -1,11 +1,11 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-regular-svg-icons";
-import { useState, useRef, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import backendApi from "../../api/backendApi/backendApi";
-import useAuth from "../../hooks/useAuth";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import "./Login.scss";
 import AuthHeader from "../../components/headers/auth-header/AuthHeader";
+import useAuth from "../../hooks/useAuth";
+import "./Login.scss";
 
 export default function Login() {
   const { setAuth } = useAuth();

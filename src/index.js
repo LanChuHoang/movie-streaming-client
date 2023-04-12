@@ -1,9 +1,9 @@
+import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from "./App";
 import AuthProvider from "./context/AuthProvider";
-import StyledEngineProvider from "@mui/material/StyledEngineProvider";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 ReactDOM.render(
   <React.StrictMode>

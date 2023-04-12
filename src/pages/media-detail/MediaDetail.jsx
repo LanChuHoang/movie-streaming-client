@@ -1,19 +1,18 @@
-import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router";
-import useBackendApi from "../../hooks/useBackendApi";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
-import "./mediaDetail.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import MediaApi from "../../api/backendApi/class/MediaApi";
+import { toYoutubeVideoUrl } from "../../api/backendApi/helper";
+import youtubeApi from "../../api/youtube/youtubeApi";
 import Button, { OutlineButton } from "../../components/button/Button";
-import CastList from "./cast-list/CastList";
-import VideoList from "./video-list/VideoList";
 import MovieList from "../../components/movie-list/MovieList";
 import SeasonList from "../../components/season-list/SeasonList";
-import MediaApi from "../../api/backendApi/class/MediaApi";
-import youtubeApi from "../../api/youtube/youtubeApi";
+import useBackendApi from "../../hooks/useBackendApi";
+import CastList from "./cast-list/CastList";
 import GenreList from "./genre-list/GenreList";
-import { toYoutubeVideoUrl } from "../../api/backendApi/helper";
-import { useNavigate } from "react-router";
+import "./mediaDetail.scss";
+import VideoList from "./video-list/VideoList";
 
 const MediaDetail = ({ itemType }) => {
   const { id } = useParams();

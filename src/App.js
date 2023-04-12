@@ -1,18 +1,18 @@
 import "swiper/swiper.min.css";
-import "./assets/boxicons-2.0.7/css/boxicons.min.css";
 import "./App.scss";
+import "./assets/boxicons-2.0.7/css/boxicons.min.css";
 
-import { Routes, Route } from "react-router-dom";
-import Login from "./pages/login/Login";
-import Register from "./pages/register/Register";
-import MainLayout from "./components/layouts/MainLayout";
-import Home from "./pages/Home";
-import Catalog from "./pages/Catalog";
-import MediaDetail from "./pages/media-detail/MediaDetail";
-import RequireAuth from "./components/auth/RequireAuth";
+import { Route, Routes } from "react-router-dom";
 import PersistLogin from "./components/auth/PersistLogin";
+import RequireAuth from "./components/auth/RequireAuth";
 import RequireUnauth from "./components/auth/RequireUnauth";
+import MainLayout from "./components/layouts/MainLayout";
+import Catalog from "./pages/Catalog";
+import Home from "./pages/Home";
+import Login from "./pages/login/Login";
+import MediaDetail from "./pages/media-detail/MediaDetail";
 import PersonDetail from "./pages/person-detail/PersonDetail";
+import Register from "./pages/register/Register";
 import WatchPage from "./pages/watch-page/WatchPage";
 
 function App() {
