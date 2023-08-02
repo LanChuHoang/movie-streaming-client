@@ -1,11 +1,13 @@
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import MediaApi from "../../api/backendApi/class/MediaApi";
 import { toYoutubeVideoUrl } from "../../api/backendApi/helper";
 import youtubeApi from "../../api/youtube/youtubeApi";
 import Button, { OutlineButton } from "../../components/button/Button";
+import HoverPopover from "../../components/hover-popover/hover-popover";
 import MovieList from "../../components/movie-list/MovieList";
 import SeasonList from "../../components/season-list/SeasonList";
 import useBackendApi from "../../hooks/useBackendApi";
@@ -17,18 +19,21 @@ import VideoList from "./video-list/VideoList";
 const MediaDetail = ({ itemType }) => {
   const { id } = useParams();
   const [item, setItem] = useState();
+  const [sentimentOverview, setSentimentOverview] = useState();
   const [credits, setCredits] = useState();
   const [seasons, setSeasons] = useState();
   const [trailers, setTrailers] = useState();
   const trailersRef = useRef();
   const seasonsRef = useRef();
   const navigate = useNavigate();
-  const backendApi = useBackendApi()[itemType];
+  const backendApi = useBackendApi();
+  const mediaApi = backendApi[itemType];
+  const reviewApi = backendApi.review;
 
   useEffect(() => {
     const getDetail = async () => {
       try {
-        const { data } = await backendApi.getItem(id);
+        const { data } = await mediaApi.getItem(id);
         setItem(data);
         window.scrollTo(0, 0);
       } catch (error) {
@@ -36,31 +41,45 @@ const MediaDetail = ({ itemType }) => {
       }
     };
     getDetail();
-  }, [itemType, id, backendApi]);
+  }, [itemType, id, mediaApi]);
+
+  useEffect(() => {
+    const getSentimentOverview = async () => {
+      try {
+        const { data } = await reviewApi.getSentimentOverview(id);
+        console.log(data);
+        setSentimentOverview(data);
+      } catch (error) {
+        if (error.response.status) setSentimentOverview(undefined);
+        console.log(error);
+      }
+    };
+    getSentimentOverview();
+  }, [itemType, id, reviewApi]);
 
   useEffect(() => {
     const getCredits = async () => {
       try {
-        const { data } = await backendApi.getCredits(id);
+        const { data } = await mediaApi.getCredits(id);
         setCredits(data);
       } catch (error) {
         console.log(error);
       }
     };
     getCredits();
-  }, [itemType, id, backendApi]);
+  }, [itemType, id, mediaApi]);
 
   useEffect(() => {
     const getSeasons = async () => {
       try {
-        const { data } = await backendApi.getSeasons(id);
+        const { data } = await mediaApi.getSeasons(id);
         setSeasons(data.filter((s) => s.episodes.length > 0));
       } catch (error) {
         console.log(error);
       }
     };
     if (itemType === MediaApi.itemType.show) getSeasons();
-  }, [itemType, id, backendApi]);
+  }, [itemType, id, mediaApi]);
 
   const handlePlay = () => {
     itemType === MediaApi.itemType.movie
@@ -109,7 +128,78 @@ const MediaDetail = ({ itemType }) => {
         <div className="movie-content__info">
           <h1 className="title">{item?.title}</h1>
           <GenreList itemType={itemType} genres={item?.genres} />
-          <p className="overview">{item?.overview}</p>
+
+          <div>
+            <div className="rating-overview">
+              <div>
+                {itemType == "movie"
+                  ? toYear(item?.releaseDate)
+                  : toYear(item?.firstAirDate) +
+                    " - " +
+                    toYear(item?.lastAirDate)}{" "}
+                {formatTime(item?.runtime)}
+              </div>
+              <div className="rating-item">
+                <svg
+                  width="35"
+                  height="14"
+                  viewBox="0 0 35 14"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <image
+                    href="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"
+                    width="100%"
+                    height="100%"
+                  />
+                </svg>
+                <span>8.5</span>
+              </div>
+              <div className="rating-item">
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 15 15"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <image
+                    href="https://upload.wikimedia.org/wikipedia/commons/5/52/Rotten_Tomatoes_rotten.svg"
+                    width="100%"
+                    height="100%"
+                  />
+                </svg>
+                <span>44%</span>
+              </div>
+              {sentimentOverview && (
+                <div className="rating-item youtube-review-overall">
+                  <svg
+                    width="20"
+                    height="13"
+                    viewBox="0 0 20 13"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <image
+                      href="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg"
+                      width="100%"
+                      height="100%"
+                    />
+                  </svg>
+                  <div className="positve-percentage">
+                    {Math.round(sentimentOverview.positivePercentage)}%{" "}
+                    <HoverPopover
+                      className="test"
+                      hoverContent={`${sentimentOverview.positivePercentage}% of the ${sentimentOverview.totalReviews} comments on Youtube are positive.`}
+                    >
+                      <InfoOutlinedIcon
+                        sx={{ fontSize: 15, color: "#ffffff", marginLeft: 0.5 }}
+                      />
+                    </HoverPopover>
+                  </div>
+                </div>
+              )}
+            </div>
+            <p className="overview">{item?.overview}</p>
+          </div>
+
           <div className="cast">
             <div className="section__header">
               <h2>Casts</h2>
@@ -162,5 +252,26 @@ const toVideoModel = (v) => ({
   thumbnailUrl: v.thumbnails.standard.url,
   srcUrl: toYoutubeVideoUrl(v.id),
 });
+
+function formatTime(durationInMinutes) {
+  if (!durationInMinutes) return "";
+  const hours = Math.floor(durationInMinutes / 60);
+  const minutes = durationInMinutes % 60;
+
+  let formattedTime = "";
+  if (hours > 0) {
+    formattedTime += hours + " hr ";
+  }
+  if (minutes > 0) {
+    formattedTime += minutes + " min";
+  }
+
+  return formattedTime.trim();
+}
+
+function toYear(datetimeStr) {
+  const date = new Date(datetimeStr);
+  return date ? date.getFullYear() : "";
+}
 
 export default MediaDetail;
