@@ -7,6 +7,7 @@ import MediaApi from "../../api/backendApi/class/MediaApi";
 import { toYoutubeVideoUrl } from "../../api/backendApi/helper";
 import youtubeApi from "../../api/youtube/youtubeApi";
 import Button, { OutlineButton } from "../../components/button/Button";
+import CommentList from "../../components/comment-list/comment-list";
 import HoverPopover from "../../components/hover-popover/hover-popover";
 import MovieList from "../../components/movie-list/MovieList";
 import SeasonList from "../../components/season-list/SeasonList";
@@ -24,6 +25,7 @@ const MediaDetail = ({ itemType }) => {
   const [seasons, setSeasons] = useState();
   const [trailers, setTrailers] = useState();
   const [reviewClips, setReviewClips] = useState();
+  const [topReviews, setTopReviews] = useState();
   const trailersRef = useRef();
   const seasonsRef = useRef();
   const navigate = useNavigate();
@@ -125,6 +127,19 @@ const MediaDetail = ({ itemType }) => {
       : setReviewClips();
   }, [item, id]);
 
+  useEffect(() => {
+    const getTopReviews = async () => {
+      try {
+        const { data } = await reviewApi.getTopReviews(id, 5);
+        console.log(data);
+        setTopReviews(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getTopReviews();
+  }, [itemType, id, reviewApi]);
+
   return (
     <>
       <div
@@ -213,7 +228,11 @@ const MediaDetail = ({ itemType }) => {
                     {Math.round(sentimentOverview.positivePercentage)}%{" "}
                     <HoverPopover
                       className="test"
-                      hoverContent={`${sentimentOverview.positivePercentage}% of the ${sentimentOverview.totalReviews} comments on Youtube are positive.`}
+                      hoverContent={`${Math.round(
+                        sentimentOverview.positivePercentage
+                      )}% of the ${
+                        sentimentOverview.totalReviews
+                      } comments on Youtube are positive.`}
                     >
                       <InfoOutlinedIcon
                         sx={{ fontSize: 15, color: "#ffffff", marginLeft: 0.5 }}
@@ -264,6 +283,18 @@ const MediaDetail = ({ itemType }) => {
           </div>
         )}
 
+        {topReviews && sentimentOverview && (
+          <div className="section mb-3">
+            <div className="section__header mb-1">
+              <h2>Reviews</h2>
+            </div>
+            <CommentList
+              comments={topReviews}
+              sentimentOverview={sentimentOverview}
+            />
+          </div>
+        )}
+
         <div className="section mb-3">
           <div className="section__header mb-1">
             <h2>Similar</h2>
@@ -311,7 +342,7 @@ function toYear(datetimeStr) {
 }
 
 function toYearPrediod(fromYear, toYear) {
-  return fromYear != toYear ? fromYear + " - " + toYear : toYear;
+  return fromYear !== toYear ? fromYear + " - " + toYear : toYear;
 }
 
 export default MediaDetail;
