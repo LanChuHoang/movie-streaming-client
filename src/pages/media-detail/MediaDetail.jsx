@@ -23,6 +23,7 @@ const MediaDetail = ({ itemType }) => {
   const [credits, setCredits] = useState();
   const [seasons, setSeasons] = useState();
   const [trailers, setTrailers] = useState();
+  const [reviewClips, setReviewClips] = useState();
   const trailersRef = useRef();
   const seasonsRef = useRef();
   const navigate = useNavigate();
@@ -47,7 +48,6 @@ const MediaDetail = ({ itemType }) => {
     const getSentimentOverview = async () => {
       try {
         const { data } = await reviewApi.getSentimentOverview(id);
-        console.log(data);
         setSentimentOverview(data);
       } catch (error) {
         if (error.response.status) setSentimentOverview(undefined);
@@ -105,6 +105,26 @@ const MediaDetail = ({ itemType }) => {
     item?.trailers?.length > 0 ? getTrailers(item.trailers) : setTrailers([]);
   }, [item, id]);
 
+  useEffect(() => {
+    const getReviews = async (ids) => {
+      try {
+        const videoData = (
+          await Promise.allSettled(
+            ids.map((id) => youtubeApi.getVideoDetail(id))
+          )
+        )
+          .filter((r) => r.status === "fulfilled")
+          .map((r, i) => toVideoModel({ ...r.value, id: ids[i] }));
+        setReviewClips(videoData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    item?.reviewClips?.length > 0
+      ? getReviews(item.reviewClips)
+      : setReviewClips();
+  }, [item, id]);
+
   return (
     <>
       <div
@@ -132,18 +152,20 @@ const MediaDetail = ({ itemType }) => {
           <div>
             <div className="rating-overview">
               <div>
-                {itemType == "movie"
+                {itemType === "movie"
                   ? toYear(item?.releaseDate)
-                  : toYear(item?.firstAirDate) +
-                    " - " +
-                    toYear(item?.lastAirDate)}{" "}
+                  : toYearPrediod(
+                      toYear(item?.firstAirDate),
+                      toYear(item?.lastAirDate)
+                    )}{" "}
                 {formatTime(item?.runtime)}
               </div>
+
               <div className="rating-item">
                 <svg
                   width="35"
-                  height="14"
-                  viewBox="0 0 35 14"
+                  height="20"
+                  viewBox="0 0 35 20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <image
@@ -152,37 +174,41 @@ const MediaDetail = ({ itemType }) => {
                     height="100%"
                   />
                 </svg>
-                <span>8.5</span>
+                <span>{item?.imdbScore}</span>
               </div>
+
               <div className="rating-item">
                 <svg
-                  width="15"
-                  height="15"
-                  viewBox="0 0 15 15"
+                  width="50"
+                  height="20"
+                  viewBox="0 0 50 20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <image
-                    href="https://upload.wikimedia.org/wikipedia/commons/5/52/Rotten_Tomatoes_rotten.svg"
+                    href="https://upload.wikimedia.org/wikipedia/commons/6/6f/Rotten_Tomatoes_logo.svg"
                     width="100%"
                     height="100%"
                   />
                 </svg>
-                <span>44%</span>
+                {item?.rottenTomatoesScore && (
+                  <span>{item.rottenTomatoesScore}%</span>
+                )}
               </div>
-              {sentimentOverview && (
-                <div className="rating-item youtube-review-overall">
-                  <svg
-                    width="20"
-                    height="13"
-                    viewBox="0 0 20 13"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <image
-                      href="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg"
-                      width="100%"
-                      height="100%"
-                    />
-                  </svg>
+
+              <div className="rating-item youtube-review-overall">
+                <svg
+                  width="30"
+                  height="20"
+                  viewBox="0 0 30 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <image
+                    href="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg"
+                    width="100%"
+                    height="100%"
+                  />
+                </svg>
+                {sentimentOverview && (
                   <div className="positve-percentage">
                     {Math.round(sentimentOverview.positivePercentage)}%{" "}
                     <HoverPopover
@@ -194,8 +220,8 @@ const MediaDetail = ({ itemType }) => {
                       />
                     </HoverPopover>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
             <p className="overview">{item?.overview}</p>
           </div>
@@ -215,7 +241,7 @@ const MediaDetail = ({ itemType }) => {
               className="trailer-button"
               onClick={() => scrollToRef(trailersRef)}
             >
-              Trailers
+              Trailer
             </OutlineButton>
           </div>
         </div>
@@ -224,10 +250,20 @@ const MediaDetail = ({ itemType }) => {
         {itemType === "show" && <SeasonList seasons={seasons} showId={id} />}
         <div className="section mb-3" ref={trailersRef}>
           <div className="section__header mb-1">
-            <h2>Trailers</h2>
+            <h2>Trailer</h2>
           </div>
           <VideoList videos={trailers} />
         </div>
+
+        {reviewClips && (
+          <div className="section mb-3">
+            <div className="section__header mb-1">
+              <h2>Relevant</h2>
+            </div>
+            <VideoList videos={reviewClips} />
+          </div>
+        )}
+
         <div className="section mb-3">
           <div className="section__header mb-1">
             <h2>Similar</h2>
@@ -272,6 +308,10 @@ function formatTime(durationInMinutes) {
 function toYear(datetimeStr) {
   const date = new Date(datetimeStr);
   return date ? date.getFullYear() : "";
+}
+
+function toYearPrediod(fromYear, toYear) {
+  return fromYear != toYear ? fromYear + " - " + toYear : toYear;
 }
 
 export default MediaDetail;

@@ -77,8 +77,8 @@
       flex-direction: row;
       align-content: center;
       margin-bottom: 0.5rem;
-      font-size: 1.1rem;
-      font-weight: 600;
+      // font-size: 1.1rem;
+      font-weight: 400;
       color: whitesmoke;
 
       & > * {
@@ -86,6 +86,9 @@
       }
 
       .rating-item {
+        display: flex;
+        flex-direction: row;
+
         svg {
           margin-right: 0.3rem;
           align-self: center;

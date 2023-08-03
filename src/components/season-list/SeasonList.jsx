@@ -1,5 +1,5 @@
 import { FormControl, MenuItem, Select } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mousewheel, Navigation } from "swiper";
 import { SwiperSlide } from "swiper/react";
@@ -12,6 +12,9 @@ import SeasonCell from "./season-cell/SeasonCell";
 const SeasonList = ({ seasons = [], showId }) => {
   const [selectedIndex, setSelectedIndex] = useState(endIndex(seasons));
   const navigate = useNavigate();
+  const swiperRef = useRef();
+  const navigationPrevRef = useRef(null);
+  const navigationNextRef = useRef(null);
 
   useEffect(() => {
     setSelectedIndex(endIndex(seasons));
@@ -54,9 +57,14 @@ const SeasonList = ({ seasons = [], showId }) => {
               slidesPerGroup: 4,
             },
           }}
+          onBeforeInit={(swiper) => {
+            swiperRef.current = swiper;
+            swiper.navigation.nextEl = navigationNextRef.current;
+            swiper.navigation.prevEl = navigationPrevRef.current;
+          }}
           navigation={{
-            prevEl: ".swiper-button-prev",
-            nextEl: ".swiper-button-next",
+            prevEl: navigationPrevRef.current,
+            nextEl: navigationNextRef.current,
           }}
           modules={[Navigation, Mousewheel]}
         >
@@ -75,8 +83,34 @@ const SeasonList = ({ seasons = [], showId }) => {
               </SwiperSlide>
             ))}
         </LazySwiper>
-        <div className="swiper-button-prev"></div>
-        <div className="swiper-button-next"></div>
+        <div
+          onClick={() => {
+            swiperRef.current?.slidePrev();
+            if (swiperRef.current?.isBeginning)
+              navigationPrevRef.current?.classList.add(
+                "swiper-button-disabled"
+              );
+            navigationNextRef.current?.classList.remove(
+              "swiper-button-disabled"
+            );
+          }}
+          className="swiper-button-prev swiper-button-disabled"
+          ref={navigationPrevRef}
+        ></div>
+        <div
+          onClick={() => {
+            swiperRef.current?.slideNext();
+            if (swiperRef.current?.isEnd)
+              navigationNextRef.current?.classList.add(
+                "swiper-button-disabled"
+              );
+            navigationPrevRef.current?.classList.remove(
+              "swiper-button-disabled"
+            );
+          }}
+          className="swiper-button-next"
+          ref={navigationNextRef}
+        ></div>
       </div>
     </div>
   );
