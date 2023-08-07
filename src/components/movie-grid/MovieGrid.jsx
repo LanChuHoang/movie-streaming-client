@@ -1,14 +1,14 @@
-import { useState, useEffect, useCallback } from "react";
+import { FormControl, MenuItem, Select } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import "./movie-grid.scss";
-import MovieCard from "../movie-card/MovieCard";
-import Button, { OutlineButton } from "../button/Button";
-import Input from "../input/Input";
-import useBackendApi from "../../hooks/useBackendApi";
-import filterOptions from "../../api/backendApi/filterOptions";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import MediaApi from "../../api/backendApi/class/MediaApi";
-import { FormControl, MenuItem, Select } from "@mui/material";
+import filterOptions from "../../api/backendApi/filterOptions";
+import useBackendApi from "../../hooks/useBackendApi";
+import Button, { OutlineButton } from "../button/Button";
+import Input from "../input/Input";
+import MovieCard from "../movie-card/MovieCard";
+import "./movie-grid.scss";
 
 const MovieGrid = ({ itemType, browseType }) => {
   const [items, setItems] = useState([]);

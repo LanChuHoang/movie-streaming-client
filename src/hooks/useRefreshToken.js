@@ -8,7 +8,7 @@ const useRefreshToken = () => {
   const refresh = async () => {
     try {
       const { accessToken } = (await backendApi.user.refreshToken()).data;
-      const { id, isAdmin } = parseJwt(accessToken);
+      const { sub: id, isAdmin } = parseJwt(accessToken);
       console.log("Prev access token ", auth?.accessToken);
       console.log("New access token ", accessToken);
       setAuth({ id, isAdmin, accessToken });

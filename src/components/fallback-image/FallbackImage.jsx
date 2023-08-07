@@ -1,5 +1,5 @@
-import "./fallbackImage.scss";
 import PropTypes from "prop-types";
+import "./fallbackImage.scss";
 
 const FallbackImage = ({ fallback, image }) => {
   return (

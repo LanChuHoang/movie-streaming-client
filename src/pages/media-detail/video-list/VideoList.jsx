@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
+import { Mousewheel, Navigation } from "swiper";
 import { SwiperSlide } from "swiper/react";
 import PlayButton from "../../../components/buttons/play-button/PlayButton";
 import LazySwiper from "../../../components/lazy-swiper/LazySwiper";
@@ -17,6 +18,10 @@ const VideoList = ({ videos = [] }) => {
     setToPlayUrl();
   }, []);
 
+  const swiperRef = useRef();
+  const navigationPrevRef = useRef(null);
+  const navigationNextRef = useRef(null);
+
   return (
     <div className="video-list-container">
       <LazySwiper
@@ -31,6 +36,16 @@ const VideoList = ({ videos = [] }) => {
             slidesPerGroup: 5,
           },
         }}
+        onBeforeInit={(swiper) => {
+          swiperRef.current = swiper;
+          swiper.navigation.nextEl = navigationNextRef.current;
+          swiper.navigation.prevEl = navigationPrevRef.current;
+        }}
+        navigation={{
+          prevEl: navigationPrevRef.current,
+          nextEl: navigationNextRef.current,
+        }}
+        modules={[Navigation, Mousewheel]}
       >
         {videos.map((v) => (
           <SwiperSlide key={v.srcUrl}>
@@ -38,6 +53,27 @@ const VideoList = ({ videos = [] }) => {
           </SwiperSlide>
         ))}
       </LazySwiper>
+
+      <div
+        onClick={() => {
+          swiperRef.current?.slidePrev();
+          if (swiperRef.current?.isBeginning)
+            navigationPrevRef.current?.classList.add("swiper-button-disabled");
+          navigationNextRef.current?.classList.remove("swiper-button-disabled");
+        }}
+        className="swiper-button-prev swiper-button-disabled"
+        ref={navigationPrevRef}
+      ></div>
+      <div
+        onClick={() => {
+          swiperRef.current?.slideNext();
+          if (swiperRef.current?.isEnd)
+            navigationNextRef.current?.classList.add("swiper-button-disabled");
+          navigationPrevRef.current?.classList.remove("swiper-button-disabled");
+        }}
+        className="swiper-button-next"
+        ref={navigationNextRef}
+      ></div>
       <TrailerModal
         open={toPlayUrl !== undefined}
         onClose={handleTrailerClose}

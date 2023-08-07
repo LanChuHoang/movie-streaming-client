@@ -1,14 +1,14 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faTimesCircle,
   faCheckCircle,
+  faTimesCircle,
 } from "@fortawesome/free-regular-svg-icons";
-import "./Register.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import useAuth from "../../hooks/useAuth";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import backendApi from "../../api/backendApi/backendApi";
 import AuthHeader from "../../components/headers/auth-header/AuthHeader";
+import useAuth from "../../hooks/useAuth";
+import "./Register.scss";
 
 function Register() {
   const [username, setUsername] = useState(null);

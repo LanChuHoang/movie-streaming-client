@@ -1,6 +1,6 @@
-import PageHeader from "../components/page-header/PageHeader";
-import MovieGrid from "../components/movie-grid/MovieGrid";
 import MediaApi from "../api/backendApi/class/MediaApi";
+import MovieGrid from "../components/movie-grid/MovieGrid";
+import PageHeader from "../components/page-header/PageHeader";
 
 const Catalog = ({ itemType, browseType }) => {
   return (

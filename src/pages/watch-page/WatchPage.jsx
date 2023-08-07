@@ -1,9 +1,9 @@
-import "./watchPage.scss";
 import { useEffect, useState } from "react";
-import VideoJs from "../../components/video-js-player/VideoJs";
 import { useParams } from "react-router-dom";
-import useBackendApi from "../../hooks/useBackendApi";
 import MediaApi from "../../api/backendApi/class/MediaApi";
+import VideoJs from "../../components/video-js-player/VideoJs";
+import useBackendApi from "../../hooks/useBackendApi";
+import "./watchPage.scss";
 
 const WatchPage = ({ itemType }) => {
   const { id, seasonNumber, episodeNumber } = useParams();

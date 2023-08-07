@@ -1,11 +1,11 @@
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import videojs from "video.js";
-import "./videoJs.scss";
 import "video.js/dist/video-js.css";
-import "videojs-http-source-selector";
 import "videojs-contrib-quality-levels";
-import "videojs-sprite-thumbnails";
 import "videojs-hotkeys";
+import "videojs-http-source-selector";
+import "videojs-sprite-thumbnails";
+import "./videoJs.scss";
 
 const VideoJs = ({ src }) => {
   const videoRef = useRef(null);

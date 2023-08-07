@@ -1,7 +1,7 @@
-import "./playButton.scss";
-import { IconButton } from "@mui/material";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconButton } from "@mui/material";
+import "./playButton.scss";
 
 const PlayButton = ({ className, ...otherProps }) => {
   return (

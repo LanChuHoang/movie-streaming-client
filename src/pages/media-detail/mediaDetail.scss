@@ -72,6 +72,40 @@
       line-height: 1;
     }
 
+    .rating-overview {
+      display: flex;
+      flex-direction: row;
+      align-content: center;
+      margin-bottom: 0.5rem;
+      // font-size: 1.1rem;
+      font-weight: 400;
+      color: whitesmoke;
+
+      & > * {
+        margin-right: 1rem;
+      }
+
+      .rating-item {
+        display: flex;
+        flex-direction: row;
+
+        svg {
+          margin-right: 0.3rem;
+          align-self: center;
+        }
+      }
+
+      .youtube-review-overall {
+        display: flex;
+        flex-direction: row;
+
+        .positve-percentage {
+          display: flex;
+          flex-direction: row;
+        }
+      }
+    }
+
     .cast {
       margin-bottom: 1.5rem;
     }

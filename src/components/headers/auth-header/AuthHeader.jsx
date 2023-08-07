@@ -1,5 +1,5 @@
-import logo from "../../../assets/tmovie.png";
 import { Link } from "react-router-dom";
+import logo from "../../../assets/tmovie.png";
 import "./AuthHeader.scss";
 
 const AuthHeader = () => {

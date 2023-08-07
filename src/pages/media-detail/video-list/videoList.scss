@@ -34,4 +34,30 @@
       }
     }
   }
+
+  position: relative;
+  --swiper-navigation-color: white;
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    @include mobile {
+      display: none;
+    }
+
+    &::after {
+      font-size: 1.8rem;
+    }
+  }
+
+  .swiper-button-prev {
+    left: -2.5rem;
+  }
+
+  .swiper-button-next {
+    right: -2.5rem;
+  }
+
+  .swiper-button-disabled {
+    display: none;
+  }
 }

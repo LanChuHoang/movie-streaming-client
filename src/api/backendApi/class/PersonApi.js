@@ -1,8 +1,8 @@
 import BaseApi from "./BaseApi";
 
 const endpoint = {
-  base: "/person",
-  search: "/person/search",
+  base: "/people",
+  search: "/people/search",
 };
 
 class PersonApi extends BaseApi {
